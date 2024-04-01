@@ -1,9 +1,8 @@
-<div class="chat-container my-5">
-    <div *ngFor="let message of messages" class="message" [class.user]="message.sender === 'user'">
-      <!-- {{ message.text }} -->
-      <div *ngIf="message.text">{{ message.text }}</div>
-      <img *ngIf="message.imageUrl" [src]="message.imageUrl" alt="Cat image" class="message-image">
-    </div>
+<div #scrollContainer class="chat-container my-5">
+  <div *ngFor="let message of messages; let i = index" class="message" [class.user]="message.sender === 'user'">
+    <div *ngIf="message.text">{{ message.text }}</div>
+    <img *ngIf="message.imageUrl" [src]="message.imageUrl" alt="Cat image" class="message-image">
+  </div>
 </div>
 
 <div class="d-flex justify-content-center">
