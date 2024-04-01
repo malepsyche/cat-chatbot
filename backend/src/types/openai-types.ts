@@ -9,4 +9,4 @@ export interface OpenAIResponse {
       logprobs: null | any; 
       finish_reason: string;
     }>;
-  }
+}

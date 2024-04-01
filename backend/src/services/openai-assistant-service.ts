@@ -3,7 +3,6 @@ import OpenAI from "openai";
 import { Thread } from 'openai/resources/beta/threads/threads';
 import { Assistant } from 'openai/resources/beta/assistants/assistants';
 import { Run } from 'openai/resources/beta/threads/runs/runs';
-import { MessageContent } from 'src/types/openai-assistant-types';
 const openai = new OpenAI();
 
 class openaiAssistantService {
