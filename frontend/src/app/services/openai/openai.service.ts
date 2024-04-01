@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
+import { environment } from '../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OpenaiService {
-  private apiUrl: string = 'http://localhost:3001/openaiAssistant/sendMessage';
+  private apiUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
