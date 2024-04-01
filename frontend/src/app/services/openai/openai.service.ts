@@ -7,7 +7,7 @@ import { environment } from '../../environment/environment';
   providedIn: 'root'
 })
 export class OpenaiService {
-  private apiUrl: string = environment.apiUrl;
+  private apiUrl: string = environment.openaiApiUrl;
 
   constructor(private http: HttpClient) { }
 

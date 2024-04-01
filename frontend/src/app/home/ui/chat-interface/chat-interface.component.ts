@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OpenaiService } from '../../../services/openai/openai.service';
+import { CatService } from '../../../services/cat/cat.service';
 
 interface Message {
   text: string;
   sender: 'user' | 'bot';
+	imageUrl?: string;
 }
+
+
 
 @Component({
   selector: 'app-chat-interface',
@@ -15,11 +19,12 @@ interface Message {
   templateUrl: './chat-interface.component.html',
   styleUrls: ['./chat-interface.component.scss'],
 })
+
 export class ChatInterfaceComponent implements OnInit {
 	messages: Message[] = [];
 	newMessage: string = '';
 
-	constructor(private openaiService: OpenaiService) {}
+	constructor(private openaiService: OpenaiService, private catService: CatService) {}
 
 	ngOnInit(): void {}
 
@@ -27,14 +32,28 @@ export class ChatInterfaceComponent implements OnInit {
 		try {
 			const tempMessage = this.newMessage;
 			this.newMessage = '';
-
 			const userMessage: Message = { text: tempMessage, sender: 'user' };
 			this.messages.push(userMessage);
-			const messageArray: string[] = await this.openaiService.getBotResponse(tempMessage);
-			const botMessages = messageArray.slice(1) // remove user input from array
-			botMessages.forEach((message) => { 
-			this.messages.push({ text: JSON.parse(message), sender: 'bot' });
-		});
+
+			if (tempMessage.toLowerCase().includes("show") && tempMessage.toLowerCase().includes("cat")) {
+				const imageUrls: string[] = await this.catService.getBotResponse(tempMessage);
+				imageUrls.forEach((imageUrl) => {
+					this.messages.push({
+						text: 'Here is a cat:', 
+						sender: 'bot',
+						imageUrl: imageUrl
+					});
+				});
+			}
+
+			else {
+				const messageArray: string[] = await this.openaiService.getBotResponse(tempMessage);
+				const botMessages = messageArray.slice(1) // remove user input from array
+				botMessages.forEach((message) => { 
+					this.messages.push({ text: JSON.parse(message), sender: 'bot' });
+				});
+			}
+
 		} catch (error) {
 			console.error('Error:', error);
 		}
