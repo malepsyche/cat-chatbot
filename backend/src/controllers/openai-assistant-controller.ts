@@ -25,7 +25,9 @@ const sendMessage = async (req: Request, res: Response): Promise<any> => {
         let run = await openaiAssistantService.createRun(thread, assistant);
         run = await openaiAssistantService.monitorRunObjectStatus(run);
         const messageArray = await openaiAssistantService.listThreadMessages(run);
-        res.json({ "messageArray" : messageArray });
+        res.json({ 
+          "messageArray" : messageArray,
+        });
 
     } catch (error) {
       console.error('Error in /openai/query: ', error);
