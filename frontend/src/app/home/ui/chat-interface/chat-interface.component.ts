@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { CommonModule, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OpenaiService } from '../../../services/openai/openai.service';
@@ -10,8 +10,6 @@ interface Message {
 	imageUrl?: string;
 }
 
-
-
 @Component({
   selector: 'app-chat-interface',
   standalone: true,
@@ -20,13 +18,30 @@ interface Message {
   styleUrls: ['./chat-interface.component.scss'],
 })
 
-export class ChatInterfaceComponent implements OnInit {
-	messages: Message[] = [];
-	newMessage: string = '';
+export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
+  
+	@ViewChild('scrollContainer') private scrollContainer?: ElementRef<HTMLDivElement>;
+  
+  messages: Message[] = [];
+  newMessage: string = '';
 
-	constructor(private openaiService: OpenaiService, private catService: CatService) {}
+  constructor(private openaiService: OpenaiService, private catService: CatService) {}
 
-	ngOnInit(): void {}
+  ngOnInit(): void {}
+
+  ngAfterViewChecked(): void {
+    this.scrollToBottom();
+  }
+
+  private scrollToBottom(): void {
+    try {
+			if (this.scrollContainer) {
+				this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+			}    
+		} catch(err) {
+      console.error('Scroll to bottom failed:', err);
+    }
+  }
 
 	async sendMessage(): Promise<void> {
 		try {
